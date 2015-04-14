@@ -36,6 +36,7 @@ module Data.Text.Template (
   parseTemplate,
   -- ** Applying Templates
   applyTemplate,
+  printTemplate
   ) where
     
 import Data.Monoid
@@ -64,9 +65,9 @@ placeholder :: T.Text -> Template
 placeholder = Template . pure . Placeholder
 
 -- | Parse a 'Template' from a template string.
--- |
--- | Placeholders are represented using double-curly-braces (@{{ ... }}@) and everything else is considered
--- | literal text. 
+--
+-- Placeholders are represented using double-curly-braces (@{{ ... }}@) and everything else is considered
+-- literal text. 
 parseTemplate :: T.Text -> Template
 parseTemplate = Template . go
   where
@@ -84,3 +85,17 @@ applyTemplate f = fmap fold . traverse apply . runTemplate
   apply :: TemplatePart -> f T.Text
   apply (Lit t) = pure t
   apply (Placeholder p) = f p
+
+newtype Id a = Id { runId :: a } 
+
+instance Functor Id where
+  fmap f = Id . f . runId
+
+instance Applicative Id where
+  pure = Id
+  (<*>) f x = Id $ runId f (runId x)
+
+-- | Render a 'Template' as a template string.
+printTemplate :: Template -> T.Text
+printTemplate = runId . applyTemplate (Id . ("{{" <>) . (<> "}}"))
+

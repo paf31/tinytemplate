@@ -32,22 +32,19 @@ genTemplateString = mconcat <$> listOf (oneof [ genText, ("{{" <>) . (<> "}}") <
 genText :: Gen T.Text
 genText = T.pack <$> listOf1 (elements (['a'..'z'] ++ ['0'..'9']))
 
-printTemplate :: T.Template -> T.Text
-printTemplate = runIdentity . T.applyTemplate (Identity . ("{{" <>) . (<> "}}"))
-
 main :: IO ()
 main = do
   -- Parser and pretty printer are compatible
   quickCheck $ do
     t <- genTemplate
-    return $ T.parseTemplate (printTemplate t) == t
+    return $ T.parseTemplate (T.printTemplate t) == t
   quickCheck $ do
     s <- genTemplateString
-    return $ printTemplate (T.parseTemplate s) == s
+    return $ T.printTemplate (T.parseTemplate s) == s
 
   -- printTemplate is a Monoid morphism
-  quickCheck $ printTemplate mempty == mempty
+  quickCheck $ T.printTemplate mempty == mempty
   quickCheck $ do
     t1 <- genTemplate
     t2 <- genTemplate
-    return $ printTemplate (t1 <> t2) == printTemplate t1 <> printTemplate t2
+    return $ T.printTemplate (t1 <> t2) == T.printTemplate t1 <> T.printTemplate t2

@@ -1,5 +1,5 @@
 name:                tinytemplate
-version:             0.1.0.0
+version:             0.1.1.0
 synopsis:            A tiny text templating library
 description:         
 homepage:            http://github.com/dicomgrid/tinytemplate
