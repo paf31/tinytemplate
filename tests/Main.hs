@@ -11,7 +11,6 @@ import qualified Data.Text.Template as T
 
 import Test.QuickCheck
 
-import Control.Monad.Identity
 import Control.Applicative
 
 genTemplate :: Gen T.Template

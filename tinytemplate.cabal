@@ -27,6 +27,5 @@ test-suite tinytemplate-tests
   build-depends:       base >=4.7 && <4.8, 
                        text >= 1.2.0.0 && < 1.3.0.0, 
                        QuickCheck, 
-                       tinytemplate,
-                       mtl
+                       tinytemplate
   default-language:    Haskell98
