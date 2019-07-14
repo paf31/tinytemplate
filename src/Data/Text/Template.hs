@@ -43,6 +43,7 @@ import Data.Monoid
 import Data.Foldable (fold)
 import Data.Traversable (traverse)
 
+import qualified Data.Semigroup as Sem
 import qualified Data.Text as T
 
 import Control.Applicative
@@ -52,9 +53,12 @@ data TemplatePart = Lit T.Text | Placeholder T.Text deriving (Show, Eq, Ord)
 -- | A text template
 newtype Template = Template { runTemplate :: [TemplatePart] } deriving (Show, Eq, Ord)
 
+instance Sem.Semigroup Template where
+  t1 <> t2 = Template (runTemplate t1 `mappend` runTemplate t2)
+
 instance Monoid Template where
-  mempty = Template mempty
-  mappend t1 t2 = Template (runTemplate t1 `mappend` runTemplate t2)
+  mempty  = Template mempty
+  mappend = (Sem.<>)
 
 -- | Create a 'Template' from a literal string
 lit :: T.Text -> Template
