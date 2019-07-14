@@ -1,7 +1,7 @@
 name:                tinytemplate
 version:             0.1.2.0
 synopsis:            A tiny text templating library
-description:         A tiny text templating library
+description:         tinytemplate is a small templating library, with similarities to mustache templates.
 homepage:            http://github.com/kruckenb/tinytemplate
 license:             MIT
 license-file:        LICENSE
